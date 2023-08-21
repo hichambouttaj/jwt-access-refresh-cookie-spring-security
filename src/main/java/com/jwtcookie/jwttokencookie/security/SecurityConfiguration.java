@@ -1,5 +1,6 @@
 package com.jwtcookie.jwttokencookie.security;
 
+import com.jwtcookie.jwttokencookie.enums.Permissions;
 import com.jwtcookie.jwttokencookie.jwt.AuthenticationFilterImpl;
 import com.jwtcookie.jwttokencookie.jwt.JwtAuthEntryPoint;
 import com.jwtcookie.jwttokencookie.jwt.JwtAuthFilter;
@@ -7,6 +8,7 @@ import com.jwtcookie.jwttokencookie.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -58,6 +60,10 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(ALLOWED_URLS).permitAll();
                     authorize.requestMatchers("/api/auth/login").permitAll();
                     authorize.requestMatchers("/api/auth/refresh").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/api/users/**").hasAuthority(Permissions.USER_READ.getName());
+                    authorize.requestMatchers(HttpMethod.POST, "/api/users/**").hasAuthority(Permissions.USER_CREATE.getName());
+                    authorize.requestMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority(Permissions.USER_UPDATE.getName());
+                    authorize.requestMatchers(HttpMethod.DELETE, "/api/users/**").hasAuthority(Permissions.USER_DELETE.getName());
 //                    authorize.anyRequest().permitAll();
                     authorize.anyRequest().authenticated();
                 });

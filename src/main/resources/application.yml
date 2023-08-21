@@ -18,6 +18,10 @@ spring:
         globally_quoted_identifiers: true
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 
 server:
   port: ${SERVER_PORT:8080}

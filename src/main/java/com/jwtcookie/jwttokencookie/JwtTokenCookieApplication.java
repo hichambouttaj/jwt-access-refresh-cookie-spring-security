@@ -1,5 +1,6 @@
 package com.jwtcookie.jwttokencookie;
 
+import com.jwtcookie.jwttokencookie.enums.Roles;
 import com.jwtcookie.jwttokencookie.model.Permission;
 import com.jwtcookie.jwttokencookie.model.Role;
 import com.jwtcookie.jwttokencookie.model.User;
@@ -30,13 +31,14 @@ public class JwtTokenCookieApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         createUsers();
     }
+
     public void createUsers() {
         if(!userRepository.findAll().isEmpty())
             return;
 
-        Role roleAdmin = roleRepository.findById(2L).get();
-        Role roleUser = roleRepository.findById(1L).get();
-        Role roleManager = roleRepository.findById(3L).get();
+        Role roleAdmin = roleRepository.findByName(Roles.ADMIN.name()).get();
+        Role roleUser = roleRepository.findByName(Roles.USER.name()).get();
+        Role roleManager = roleRepository.findByName(Roles.MANAGER.name()).get();
 
         User admin = User.builder()
                 .id(0L)
@@ -61,5 +63,4 @@ public class JwtTokenCookieApplication implements ApplicationRunner {
 
         userRepository.saveAll(List.of(user, admin, manager));
     }
-
 }

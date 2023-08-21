@@ -18,6 +18,11 @@ public class UserMapper {
                 user.getRole().getPermissions().stream().map(Permission::getAuthority).collect(Collectors.toSet())
         );
     }
+    public static User userDtoToUser(UserDto dto) {
+        User user = new User();
+        user.setUsername(dto.username());
+        return user;
+    }
     public static UserLoggedDto userToUserLoggedDto(User user) {
         return new UserLoggedDto(
                 user.getUsername(),

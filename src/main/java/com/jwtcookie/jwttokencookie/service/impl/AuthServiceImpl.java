@@ -107,6 +107,30 @@ public class AuthServiceImpl implements AuthService {
             addAccessTokenCookie(responseHeaders, newAccessToken);
         }
 
+        if(accessTokenValid && refreshTokenValid) {
+            newAccessToken = tokenProvider.generateAccessToken(
+                    Map.of("role", user.getRole().getAuthority()),
+                    accessTokenDurationMinute,
+                    ChronoUnit.MINUTES,
+                    user
+            );
+
+            newRefreshToken = tokenProvider.generateRefreshToken(
+                    refreshTokenDurationDay,
+                    ChronoUnit.DAYS,
+                    user
+            );
+
+            newAccessToken.setUser(user);
+            newRefreshToken.setUser(user);
+
+            // save tokens in db
+            tokenRepository.saveAll(List.of(newAccessToken, newRefreshToken));
+
+            addAccessTokenCookie(responseHeaders, newAccessToken);
+            addRefreshTokenCookie(responseHeaders, newRefreshToken);
+        }
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         LoginResponse loginResponse = new LoginResponse(true, user.getRole().getName());
