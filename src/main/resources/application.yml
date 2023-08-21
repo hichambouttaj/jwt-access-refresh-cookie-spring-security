@@ -10,7 +10,7 @@ spring:
     generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         jdbc:
@@ -22,7 +22,6 @@ spring:
   sql:
     init:
       mode: always
-
 server:
   port: ${SERVER_PORT:8080}
 
